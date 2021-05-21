@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  database:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/.database/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+  php:
+    build: ./docker/php
+    ports:
+      - "9000:9000"
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+      - DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:3306/${DATABASE_NAME}?serverVersion=5.7
+    volumes: 
+      - ./symfony/:/var/www/symfony:cached
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "80:80"
+    volumes: 
+      - ./symfony/:/var/www/symfony:cached
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      UPLOAD_LIMIT: 300M
