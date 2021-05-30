@@ -1,51 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ad index{% endblock %}
+{% block title %}Annonces{% endblock %}
 
 {% block body %}
-    <h1>Ad index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>ShortDescription</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>Price</th>
-                <th>City</th>
-                <th>Phone</th>
-                <th>Thumbnail</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="w-100 d-flex mx-auto mt-3">
+        <h1 class="mt-3 mx-auto">Annonces</h1>
+    </div>
+    <div class="w-100 d-flex mx-auto mt-3">
+        <a class="btn border-danger text-light mx-auto" href="{{ path('ad_new') }}">Créer une annonce</a>
+    </div>
+    <div class="w-100 d-flex container flex-column mx-auto mt-3">
         {% for ad in ads %}
-            <tr>
-                <td>{{ ad.id }}</td>
-                <td>{{ ad.title }}</td>
-                <td>{{ ad.content }}</td>
-                <td>{{ ad.shortDescription }}</td>
-                <td>{{ ad.createdAt ? ad.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ ad.updatedAt ? ad.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ ad.price }}</td>
-                <td>{{ ad.city }}</td>
-                <td>{{ ad.phone }}</td>
-                <img src="{{ ad.thumbnail }}">
-                <td>
-                    <a href="{{ path('ad_show', {'id': ad.id}) }}">show</a>
-                    <a href="{{ path('ad_edit', {'id': ad.id}) }}">edit</a>
-                </td>
-            </tr>
+            <div class="card mx-auto mt-3" style="width: 30rem;">
+                <img src="{{ ad.thumbnail }}" class="card-img-top" alt="photo de {{ ad.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ad.title }}</h5>
+                    <p class="card-text">{{ ad.shortDescription |length > 50 ? myentity.text|slice(0, 50) ~ '...' : ad.shortDescription}}</p>
+                    <a href="{{ path('ad_show', {'id': ad.id}) }}" class="btn btn-primary">Voir l'annonce</a>
+                    <a href="{{ path('ad_edit', {'id': ad.id}) }}"class="btn border-danger text-light">Editer l'annonce</a>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="11">no records found</td>
-            </tr>
+            <div>
+                <p>Aucune annonce trouvée</p>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('ad_new') }}">Create new</a>
+    </div>
 {% endblock %}

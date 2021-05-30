@@ -3,6 +3,7 @@
 **/.DS_Store
 symfony/.env
 symfony/public/bundles/
+symfony/public/header_images_uploads
 symfony/var/
 symfony/vendor/
 docker/.database/

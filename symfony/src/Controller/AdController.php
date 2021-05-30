@@ -6,6 +6,7 @@ use App\Entity\Ad;
 use App\Entity\User;
 use App\Form\AdType;
 use App\Repository\AdRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class AdController extends AbstractController
 
     /**
      * @Route("/new", name="ad_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
@@ -73,9 +75,14 @@ class AdController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="ad_edit", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Ad $ad): Response
     {
+        if (!$this->isGranted('AD_EDIT', $ad)) {
+            
+            return $this->redirectToRoute('ad_index');
+        }
         $form = $this->createForm(AdType::class, $ad);
         $form->handleRequest($request);
 
@@ -93,6 +100,7 @@ class AdController extends AbstractController
 
     /**
      * @Route("/{id}", name="ad_delete", methods={"POST"})
+     * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Ad $ad): Response
     {

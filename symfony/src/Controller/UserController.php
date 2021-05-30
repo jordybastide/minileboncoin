@@ -53,6 +53,10 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
+        if (!$this->isGranted('USER_EDIT', $user)) {
+            
+            return $this->redirectToRoute('app_account');
+        }
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -63,6 +67,11 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
+        if (!$this->isGranted('USER_EDIT', $user)) {
+            
+            return $this->redirectToRoute('app_account');
+        }
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -83,12 +92,20 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
+        $user = $this->getUser();
+        
+        if($user == null)
+        {
+            return $this->redirect($this->generateUrl('index'));
+        }
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+            $this->container->get('security.token_storage')->setToken(null);
             $entityManager->remove($user);
             $entityManager->flush();
         }
+        $this->addFlash('success', 'Votre compte utilisateur a bien été supprimé !'); 
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('app_logout');
     }
 }
