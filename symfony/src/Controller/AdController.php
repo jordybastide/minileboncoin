@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/ad")
+ * @Route("/my-ads")
+ * @Security("is_granted('ROLE_USER')")
  */
 class AdController extends AbstractController
 {
@@ -22,14 +23,16 @@ class AdController extends AbstractController
      */
     public function index(AdRepository $adRepository): Response
     {
+        $ads = $adRepository->findBy([
+            'user' => $this->getUser(),
+        ]);
         return $this->render('ad/index.html.twig', [
-            'ads' => $adRepository->findAll(),
+            'ads' => $ads,
         ]);
     }
 
     /**
      * @Route("/new", name="ad_new", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
@@ -75,7 +78,6 @@ class AdController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="ad_edit", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_USER')")
      */
     public function edit(Request $request, Ad $ad): Response
     {
@@ -84,10 +86,21 @@ class AdController extends AbstractController
             return $this->redirectToRoute('ad_index');
         }
         $form = $this->createForm(AdType::class, $ad);
+        $thumbnail = $ad->getThumbnail();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+
+            if ($ad->getThumbnail() === null) {
+
+                $ad
+                ->setThumbnail($thumbnail);
+            }
+            $ad
+                ->setUpdatedAt(new \DateTime());
+                
+            $entityManager->flush();
 
             return $this->redirectToRoute('ad_index');
         }
@@ -100,11 +113,14 @@ class AdController extends AbstractController
 
     /**
      * @Route("/{id}", name="ad_delete", methods={"POST"})
-     * @Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_USER')")
      */
     public function delete(Request $request, Ad $ad): Response
     {
         if ($this->isCsrfTokenValid('delete'.$ad->getId(), $request->request->get('_token'))) {
+            //on recupère le nom de l'image
+            $name = $ad->getThumbnail();
+            //on supprime le fichier
+            unlink($this->getParameter('public_dir').'/'.$name);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ad);
             $entityManager->flush();

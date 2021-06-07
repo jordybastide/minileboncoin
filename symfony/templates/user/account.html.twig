@@ -3,7 +3,7 @@
 {% block title %} Mon compte {% endblock %}
 
 {% block body %}
-<div id="opacity" class="pt-5 container-fluid">
+<div class="pt-5 container">
      <div class="d-flex flex-column justify-content-evenly">
           <h1 class="mt-5 pt-5 text-center">Mon compte</h1>
           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -17,14 +17,11 @@
                </div>          
                <div class="pt-5 d-flex justify-content-evenly">
                     <div class="">
-                         <a class="btn btn-warning" href="{{ path('index') }}">Retour à l'accueil</a>
+                         <a class="btn btn-warning text-light" href="{{ path('index') }}">Retour à l'accueil</a>
                     </div>
                     <div class="d-flex flex-column">
-                         <a class="btn btn-info" href="{{ path ('user_edit', {'id': app.user.id}) }}">Modifier les informations</a>
-                         <form method="post" action="{{ path('user_delete', {'id': app.user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le compte?');">
-                              <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
-                              <button class="btn btn-danger">Supprimer le compte</button>
-                         </form>
+                         <a class="btn btn-info text-light" href="{{ path ('user_edit', {'id': app.user.id}) }}">Modifier les informations</a>
+                         {{ include('user/_delete_form.html.twig') }}
                     </div>
                </div>
           {% endif %}

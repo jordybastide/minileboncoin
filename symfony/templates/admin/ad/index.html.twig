@@ -1,13 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Annonces{% endblock %}
+{% block title %}Les Annonces{% endblock %}
 
 {% block body %}
     <div class="w-100 d-flex mx-auto mt-3">
-        <h1 class="mt-3 mx-auto">Mes Annonces</h1>
-    </div>
-    <div class="w-100 d-flex mx-auto mt-3">
-        <a class="btn btn-success text-light mx-auto" href="{{ path('ad_new') }}">Créer une annonce</a>
+        <h1 class="mt-3 mx-auto">Les Annonces</h1>
     </div>
     <div class="w-100 d-flex container flex-column mx-auto mt-3">
         {% for ad in ads %}
@@ -17,9 +14,9 @@
                     <h5 class="card-title">{{ ad.title }}</h5>
                     <p class="card-text">{{ ad.shortDescription |length > 50 ? myentity.text|slice(0, 50) ~ '...' : ad.shortDescription}}</p>
                     <div class="d-flex justify-content-around">
-                        <a href="{{ path('ad_show', {'id': ad.id}) }}" class="btn btn-primary">Voir l'annonce</a>
-                        <a href="{{ path('ad_edit', {'id': ad.id}) }}"class="btn btn-success text-light">Editer l'annonce</a>
-                        {{ include('ad/_delete_form.html.twig') }}
+                        <a href="{{ path('admin_ad_show', {'id': ad.id}) }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ path('admin_ad_edit', {'id': ad.id}) }}"class="btn btn-success">Modifier</a>
+                        {{ include('admin/ad/_delete_form.html.twig') }}
                     </div>
                 </div>
             </div>

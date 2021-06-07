@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+<div class="w-100 mx-auto d-flex flex-column">
+    <div class="mt-4 mx-auto d-flex flex-column w-75">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name) }}
+        {{form_errors(form.name)}}
+    </div>
+    <div class="mt-4 mx-auto d-flex flex-column w-75">
+        {{ form_label(form.thumbnail) }}
+        {{ form_widget(form.thumbnail) }}
+        {{form_errors(form.thumbnail)}}
+    </div>
+</div>
+<div class="d-flex flex-column mx-auto mt-4">
+    <div class="mx-auto">
+        <button class="btn btn-success">{{ button_label|default('Publier') }}</button>
+    </div>
+</div>
+{{ form_end(form) }}

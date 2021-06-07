@@ -1,17 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 
-<div class="my-container mt-5">
+<div class="w-100 d-flex container flex-column mx-auto mt-3">
     {% for ad in ads %}
-    <h6 class="">{{ ad.title }}</h6>
-    <p><i>Publié le : {{ad.createdAt |date('d-m-Y H:i:s')}}</i></p>
+        <div class="card mx-auto mt-3" style="max-width: 30rem;">
+            <img src="{{ ad.thumbnail }}" class="img-fluid card-img-top" alt="photo de {{ ad.title }}">
+            <div class="card-body">
+                <p><i>Publié le : {{ad.createdAt |date('d-m-Y H:i:s')}}</i></p>
+                <h5 class="card-title">{{ ad.title }}</h5>
+                <p class="card-text">{{ ad.shortDescription |length > 50 ? myentity.text|slice(0, 50) ~ '...' : ad.shortDescription}}</p>
+                <a href="{{ path('public_ad_show', {'id': ad.id}) }}" class="btn btn-primary">Voir l'annonce</a>
+            </div>
+        </div>
+    {% else %}
+        <div>
+            <p>Aucune annonce trouvée</p>
+        </div>
     {% endfor %}
 </div>
-
-<div class="navigation">
+<div class="navigation mt-5">
     {{ knp_pagination_render(ads) }}
 </div>
 {% endblock %}

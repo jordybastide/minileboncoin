@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle catégorie{% endblock %}
+
+{% block body %}
+<div class="my-container">
+    <div class="w-100 d-flex mx-auto mt-3">
+        <h1 class="mt-3 mx-auto">Créer une Catégorie</h1>
+    </div>
+    <div class="container mt-5">
+        {{ include('admin/category/_form.html.twig') }}
+    
+        <a class="btn btn-warning text-light" href="{{ path('category_index') }}">Retour</a>
+    </div>
+</div>
+{% endblock %}

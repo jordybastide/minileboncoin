@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+<div class="w-100 d-flex mx-auto mt-3">
+     <h1 class="mt-3 mx-auto">Administration</h1>
+</div>
+<div class="container d-flex mt-5 flex-column">
+     <div class="mx-auto mt-3">
+          <a class="btn btn-primary" href="{{ path ('admin_ad_index') }}"> Les Annonces</a>
+     </div>
+     <div class="mx-auto mt-3">
+          <a class="btn btn-primary" href="{{ path ('category_index') }}"> Les Catégories</a>
+     </div>
+     <div class="mx-auto mt-3">
+          <a class="btn btn-primary" href="{{ path ('admin_user_index') }}"> Les Utilisateurs</a>
+     </div>
+</div>
+
+{% endblock %}
