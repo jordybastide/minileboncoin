@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Ad;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\AbstractQuery;
 
 /**
  * @method Ad|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +20,20 @@ class AdRepository extends ServiceEntityRepository
         parent::__construct($registry, Ad::class);
     }
 
+    /**
+     * @return Ad[] Returns an array of Ad objects
+     */
+    
+    public function findByTerms(?string $terms)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.title LIKE :terms')
+            ->setParameter('terms', '%' . $terms . '%')
+            ->setMaxResults(15)
+            ->getQuery()
+            ->getResult(AbstractQuery::HYDRATE_ARRAY);
+        ;
+    }
     // /**
     //  * @return Ad[] Returns an array of Ad objects
     //  */
