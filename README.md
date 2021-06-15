@@ -14,6 +14,6 @@ Change credentials according to your specific needs in .env file
 
 Import SQL Dump @ http://localhost:8081/
 
-http://localhost/
+Then go to http://localhost/
 
 docker-compose down -v when you are done
